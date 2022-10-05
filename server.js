@@ -57,8 +57,8 @@ function promptOptions() {
             addRole();
             break;
 
-          case "Add an Employee":
-           // addEmployee();
+          case "Add an employee":
+            addEmployee();
             break;
 
           case "Update an employee role":
@@ -246,4 +246,67 @@ function promptOptions() {
           })
         }
 
-     
+
+     //function to add an employee
+   function addEmployee(){
+    
+    console.log("Lets add an Employee!");
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "id",
+            message: "What is the employee id?"
+        },
+        {
+            type: "input",
+            name: "first_name",
+            message: "What is the employee's first name?"
+        },
+        {
+            type: "input",
+            name: "last_name",
+            message: "What is the employee's last_name?"
+        },
+        {
+            type: "input",
+            name: "role_id",
+            message: "What is the role ID of this employee?",
+        },
+        {
+          type: "input",
+          name: "mngr_id",
+          message: "What is the Manager's ID for this Employee?"
+        }
+    ]).then(answer => {
+      var manager = answer.mngr_id;
+      if(manager == "null"){
+        manager = null;
+      } else{
+        manager = parseInt(manager);
+      }
+      console.log(manager);
+        db.query("INSERT INTO employees SET ?",{id: parseInt(answer.id), first_name: answer.first_name, last_name: answer.last_name, role_id: parseInt(answer.role_id), manager_id: manager},function(err, results){
+          console.log(err);
+            console.table(results);
+            inquirer.prompt({
+                type: "list",
+                name: "options",
+                message: "Select an Option",
+                choices: [
+                  "Return to main menu",
+                  "End"]
+              })
+              .then(function ({ options }) {
+                switch (options) {
+                    case "Return to main menu":
+                        promptOptions();
+                        break;
+    
+                    case "End":
+                        db.end();
+                        break;
+                    }
+                });
+              })
+          })
+        }
