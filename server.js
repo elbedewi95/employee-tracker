@@ -53,9 +53,10 @@ function promptOptions() {
             addDepartment();
             break;
 
-          case "Add a Role":
-           // addRole();
+          case "Add a role":
+            addRole();
             break;
+
           case "Add an Employee":
            // addEmployee();
             break;
@@ -74,6 +75,7 @@ function promptOptions() {
 //query display all depts
   function viewDepartments(){
     db.query('SELECT * FROM department', function (err, results) {
+      console.log(results);
         console.table(results);
         inquirer.prompt({
             type: "list",
@@ -148,6 +150,7 @@ function promptOptions() {
       });
   }
 
+  //function to add a department
   function addDepartment(){
     console.log("Lets add a department!");
     inquirer.prompt([
@@ -188,3 +191,59 @@ function promptOptions() {
         })
     })
   }
+
+
+   //function to add a role
+   function addRole(){
+    
+    console.log("Lets add a Role!");
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "id",
+            message: "What is the role id?"
+        },
+        {
+            type: "input",
+            name: "title",
+            message: "What is the role title?"
+        },
+        {
+            type: "input",
+            name: "salary",
+            message: "What is the salary for this role?"
+        },
+        {
+            type: "list",
+            name: "dept_id",
+            message: "Which department does this role belong?",
+            choices: ["001. Finance", "003. IT", "005. Retail", "007. Marketing", "009. Training", "011. Legal"]
+        }
+    ]).then(answer => {
+        db.query("INSERT INTO roles SET ?",{id: parseInt(answer.id), title: answer.title, salary: parseFloat(answer.salary), department_id: parseInt(answer.dept_id.slice(0,3))},function(err, results){
+          console.log(err);
+            console.table(results);
+            inquirer.prompt({
+                type: "list",
+                name: "options",
+                message: "Select an Option",
+                choices: [
+                  "Return to main menu",
+                  "End"]
+              })
+              .then(function ({ options }) {
+                switch (options) {
+                    case "Return to main menu":
+                        promptOptions();
+                        break;
+    
+                    case "End":
+                        db.end();
+                        break;
+                    }
+                });
+              })
+          })
+        }
+
+     
