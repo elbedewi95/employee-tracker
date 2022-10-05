@@ -11,7 +11,7 @@ This is a command line application to view, add, update a company's database. <b
 
 
 
-<p id = "info">You can view: 
+<p id = "info">1. Information: <br> You can view: 
 <ul>
 <li>Employees</li>
 <li>Departments</li>
@@ -25,8 +25,6 @@ As well as add a(n): <br>
 <li>Department</li>
 <li>Role</li>
 </ul>
-<br>
-
 You can also update an employee's role.</p>
 <p id = "tech">2. Technologies used: 
 <ul>
