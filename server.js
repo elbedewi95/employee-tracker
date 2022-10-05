@@ -62,7 +62,7 @@ function promptOptions() {
             break;
 
           case "Update an employee role":
-           // updateEmployeeRole();
+           updateEmployeeRole();
             break;
   
   
@@ -310,3 +310,88 @@ function promptOptions() {
               })
           })
         }
+
+
+
+        //update an employee role
+        function updateEmployeeRole() { 
+          employeeArray();
+        
+        }
+        //get all employees
+        function employeeArray() {
+        
+          db.query(`SELECT * FROM employees`, function (err, res) {
+            if (err) throw err;
+        
+            const employeeChoices = res.map(({ id, first_name, last_name }) => ({
+              value: id, name: `${first_name} ${last_name}`      
+            }));
+        
+            console.table(res);
+            // console.log("updated employee array")
+        
+            roleArray(employeeChoices);
+          });
+        }
+        
+        // getting all roles
+        function roleArray(employeeChoices) {
+          
+        
+          var query =
+            `SELECT roles.id, roles.title
+             FROM roles`
+          let roleChoices;
+        
+          db.query(query, function (err, res) {
+            if (err) throw err;
+        
+            roleChoices = res.map(({ id, title }) => ({
+              value: id, name: `${title}`      
+            }));
+            // console.log("role choices 1  "+ roleChoices[1].title )
+            
+            console.table(res);
+          
+        
+            promptEmployeeRole(employeeChoices, roleChoices);
+          });
+        }
+        
+        function promptEmployeeRole(employeeChoices, roleChoices) {
+        // console.log("These are the role choices "+roleChoices);
+          inquirer
+            .prompt([
+              {
+                type: "list",
+                name: "employeeId",
+                message: "Whose role would you like to change?",
+                choices: employeeChoices
+              },
+              {
+                type: "list",
+                name: "roleId",
+                message: "Which role do you want to give them?",
+                choices: roleChoices
+              },
+            ])
+            .then(function (answer) {
+        
+              var query = `UPDATE employees SET role_id = ? WHERE id = ?`
+              // when finished prompting, insert a new item into the db with that info
+              db.query(query,
+                [ answer.roleId,  
+                  answer.employeeId
+                ],
+                function (err, res) {
+                  if (err) throw err;
+        
+                  console.table(res);
+                  console.log(res.affectedRows + "Updated successfully!");
+        
+                  promptOptions();
+                });
+            });
+        }
+        
