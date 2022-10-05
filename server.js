@@ -50,7 +50,7 @@ function promptOptions() {
             break;
   
           case "Add a department":
-           // addDepartment();
+            addDepartment();
             break;
 
           case "Add a Role":
@@ -122,7 +122,7 @@ function promptOptions() {
       });
       });
   }
-
+//query to display all employees
   function viewEmployees(){
     db.query('SELECT * FROM employees', function (err, results) {
         console.table(results);
@@ -146,4 +146,45 @@ function promptOptions() {
             }
       });
       });
+  }
+
+  function addDepartment(){
+    console.log("Lets add a department!");
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "id",
+            message: "What is the department id?"
+        },
+        {
+            type: "input",
+            name: "name",
+            message: "What is the department name?"
+        }
+    ]).then(answer => {
+        console.log(`id is : ${parseInt(answer.id)}, name is :
+        ${answer.name}`)
+        db.query("INSERT INTO department SET ?",{id: parseInt(answer.id), name: answer.name},function(err, results){
+            console.table(results);
+            inquirer.prompt({
+                type: "list",
+                name: "options",
+                message: "Select an Option",
+                choices: [
+                  "Return to main menu",
+                  "End"]
+              })
+              .then(function ({ options }) {
+                switch (options) {
+                    case "Return to main menu":
+                        promptOptions();
+                        break;
+    
+                    case "End":
+                        db.end();
+                        break;
+                }
+          });
+        })
+    })
   }
