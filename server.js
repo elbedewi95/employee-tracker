@@ -46,7 +46,7 @@ function promptOptions() {
             break;
         
           case "View all employees":
-            //viewEmployees();
+            viewEmployees();
             break;
   
           case "Add a department":
@@ -75,13 +75,75 @@ function promptOptions() {
   function viewDepartments(){
     db.query('SELECT * FROM department', function (err, results) {
         console.table(results);
-        promptOptions();
+        inquirer.prompt({
+            type: "list",
+            name: "options",
+            message: "Select an Option",
+            choices: [
+              "Return to main menu",
+              "End"]
+          })
+          .then(function ({ options }) {
+            switch (options) {
+                case "Return to main menu":
+                    promptOptions();
+                    break;
+
+                case "End":
+                    db.end();
+                    break;
+            }
       });
-  }
+    });
+}
+  
 //query display all roles
   function viewRoles(){
     db.query('SELECT * FROM roles', function (err, results) {
         console.table(results);
-        promptOptions();
+        inquirer.prompt({
+            type: "list",
+            name: "options",
+            message: "Select an Option",
+            choices: [
+              "Return to main menu",
+              "End"]
+          })
+          .then(function ({ options }) {
+            switch (options) {
+                case "Return to main menu":
+                    promptOptions();
+                    break;
+
+                case "End":
+                    db.end();
+                    break;
+            }
+      });
+      });
+  }
+
+  function viewEmployees(){
+    db.query('SELECT * FROM employees', function (err, results) {
+        console.table(results);
+        inquirer.prompt({
+            type: "list",
+            name: "options",
+            message: "Select an Option",
+            choices: [
+              "Return to main menu",
+              "End"]
+          })
+          .then(function ({ options }) {
+            switch (options) {
+                case "Return to main menu":
+                    promptOptions();
+                    break;
+
+                case "End":
+                    db.end();
+                    break;
+            }
+      });
       });
   }
