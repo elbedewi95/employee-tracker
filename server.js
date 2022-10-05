@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
 const mysql = require ("mysql2");
-
+require("console.table");
 // Connect to database
 const db = mysql.createConnection(
     {
@@ -38,7 +38,7 @@ function promptOptions() {
       .then(function ({ options }) {
         switch (options) {
           case "View all departments":
-            //viewDepartments();
+            viewDepartments();
             break;
   
           case "View all roles":
@@ -69,5 +69,11 @@ function promptOptions() {
             db.end();
             break;
         }
+      });
+  }
+
+  function viewDepartments(){
+    db.query('SELECT * FROM department', function (err, results) {
+        console.table(results);
       });
   }
