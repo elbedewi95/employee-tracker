@@ -42,7 +42,7 @@ function promptOptions() {
             break;
   
           case "View all roles":
-           // viewRoles();
+            viewRoles();
             break;
         
           case "View all employees":
@@ -71,9 +71,17 @@ function promptOptions() {
         }
       });
   }
-
+//query display all depts
   function viewDepartments(){
     db.query('SELECT * FROM department', function (err, results) {
         console.table(results);
+        promptOptions();
+      });
+  }
+//query display all roles
+  function viewRoles(){
+    db.query('SELECT * FROM roles', function (err, results) {
+        console.table(results);
+        promptOptions();
       });
   }
