@@ -75,7 +75,7 @@ function promptOptions() {
 //query display all depts
   function viewDepartments(){
     db.query('SELECT * FROM department', function (err, results) {
-      console.log(results);
+      // console.log(results);
         console.table(results);
         inquirer.prompt({
             type: "list",
@@ -355,11 +355,11 @@ function promptOptions() {
             console.table(res);
           
         
-            promptEmployeeRole(employeeChoices, roleChoices);
+            promptEmployeeRoleUpdate(employeeChoices, roleChoices);
           });
         }
         
-        function promptEmployeeRole(employeeChoices, roleChoices) {
+        function promptEmployeeRoleUpdate(employeeChoices, roleChoices) {
         // console.log("These are the role choices "+roleChoices);
           inquirer
             .prompt([
